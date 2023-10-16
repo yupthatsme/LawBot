@@ -88,7 +88,7 @@ class CustomDataChatbot:
 
         # Join the metadata strings with '\n' separator
         # source_documents_string = "\n\n".join(metadata_strings)
-        return metadata_strings[0]
+        return 
 
     @utils.enable_chat_history
     def main(self):
