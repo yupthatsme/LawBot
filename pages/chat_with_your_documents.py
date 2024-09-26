@@ -18,7 +18,7 @@ class CustomDataChatbot:
 
     def __init__(self):
         utils.configure_openai_api_key()
-        self.openai_model = "gpt-3.5-turbo-16k"
+        self.openai_model = "gpt-4"
 
     def make_retriever(self):
         index_name= initialize_pinecone()
@@ -51,6 +51,8 @@ class CustomDataChatbot:
         llm = ChatOpenAI(temperature=0)
 
         # Setup LLM and QA chain
+        # llm = ChatOpenAI(model_name=self.openai_model, temperature=0, streaming=True)
+           # Use GPT-4 as the model
         llm = ChatOpenAI(model_name=self.openai_model, temperature=0, streaming=True)
 
         qa_chain = ConversationalRetrievalChain.from_llm(
