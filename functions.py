@@ -18,14 +18,14 @@ def initialize_pinecone():
     environment = os.getenv("PINECONE_ENV")
     index_name = os.getenv("PINECONE_INDEX_NAME")
 
-    if not api_key or not environment:
+   
+
+   if not api_key or not environment:
         raise ValueError("Pinecone API key or environment not set in .env file")
 
-   # Initialize Pinecone without arguments
-    pinecone.init(api_key=api_key, environment=environment)
-
-    # Set the API key and environment using the provided methods
-    pc.init(api_key=api_key, environment=environment)
+    # Initialize Pinecone using the new API
+    pc = Pinecone(api_key=api_key)
+    
     # Check if the index exists, if not, create it
     if index_name not in pc.list_indexes().names():
         # Create the index (adjust 'dimension' and 'metric' according to your needs)
