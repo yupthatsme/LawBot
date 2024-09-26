@@ -11,18 +11,48 @@ import pandas as pd
 
 
 def initialize_pinecone():
-    load_dotenv()
+  
+    load_dotenv()  # Load environment variables from .env file
+
+    api_key = os.getenv("PINECONE_API_KEY")
+    environment = os.getenv("PINECONE_ENV")
+    index_name = os.getenv("PINECONE_INDEX_NAME")
+
+    if not api_key or not environment:
+        raise ValueError("Pinecone API key or environment not set in .env file")
+
+    # Create Pinecone instance with the API key
+    pc = Pinecone(api_key=api_key)
+
+    # Check if the index exists, if not, create it
+    if index_name not in pc.list_indexes().names():
+        # Create the index (adjust 'dimension' and 'metric' according to your needs)
+        pc.create_index(
+            name=laws,
+            dimension=1536,  # Adjust this to match the dimension of your embeddings
+            metric='cosine',  # Can be 'cosine', 'dotproduct', etc.
+            spec=ServerlessSpec(
+                cloud='aws',   # Your cloud provider
+                region=us-east-1  # Your Pinecone environment (e.g., 'us-west-1')
+            )
+        )
+
+    return index_name
+    
+    
+    
+    # load_dotenv()
 
     # initialize pinecone
-    pinecone.init(
-        api_key=os.getenv("PINECONE_API_KEY"),  # find at app.pinecone.io
-        environment=os.getenv("PINECONE_ENV"),  # next to api key in console
-    )
-    index_name= os.getenv("PINECONE_INDEX_NAME")
-    if index_name not in pinecone.list_indexes():
+   # pinecone.init(
+       # api_key=os.getenv("PINECONE_API_KEY"),  # find at app.pinecone.io
+    #    environment=os.getenv("PINECONE_ENV"),  # next to api key in console
+   # )
+   # index_name= os.getenv("PINECONE_INDEX_NAME")
+   # if index_name not in pinecone.list_indexes():
         # Create an index if it doesn't exist, replace 1536 with the actual dimension of your embeddings
-        pinecone.create_index(index_name, dimension=1536)
-    return index_name
+       # pinecone.create_index(index_name, dimension=1536)
+   # return index_name
 
 def save_to_pinecone(data, file_name):
 
