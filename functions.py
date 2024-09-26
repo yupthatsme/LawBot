@@ -22,7 +22,7 @@ def initialize_pinecone():
         raise ValueError("Pinecone API key or environment not set in .env file")
 
     # Create Pinecone instance with the API key
-    pc = Pinecone(api_key=api_key)
+    pc = Pinecone(api_key='f9786599-94f4-45bf-8d05-a35392544844')
 
     # Check if the index exists, if not, create it
     if index_name not in pc.list_indexes().names():
