@@ -16,11 +16,21 @@ st.set_page_config(page_title="ChatDocs", page_icon="📄")
 
 class CustomDataChatbot:
 
-    def initialize_pinecone():
-    pinecone_api_key = os.getenv('PINECONE_API_KEY')
-    pinecone_env = os.getenv('PINECONE_ENV')
-    pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
-    return os.getenv('PINECONE_INDEX_NAME')
+   def initialize_pinecone(self):
+        """Initialize Pinecone connection."""
+        try:
+            pinecone_api_key = os.getenv('PINECONE_API_KEY')
+            pinecone_env = os.getenv('PINECONE_ENV')
+            pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
+            index_name = os.getenv('PINECONE_INDEX_NAME')
+            if index_name not in pinecone.list_indexes():
+                # If index does not exist, create it
+                pinecone.create_index(index_name, dimension=1536)  # Ensure the dimension is correct
+            return index_name
+        except Exception as e:
+            st.error(f"Failed to initialize Pinecone: {e}")
+            return None
+
 
     def __init__(self):
         utils.configure_openai_api_key()
