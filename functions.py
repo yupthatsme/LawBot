@@ -22,7 +22,7 @@ def initialize_pinecone():
         raise ValueError("Pinecone API key or environment not set in .env file")
 
    # Initialize Pinecone without arguments
-    pc = Pinecone()
+    pinecone.init(api_key=api_key, environment=environment)
 
     # Set the API key and environment using the provided methods
     pc.init(api_key=api_key, environment=environment)
