@@ -16,7 +16,23 @@ st.set_page_config(page_title="ChatDocs", page_icon="📄")
 
 class CustomDataChatbot:
 
-   def initialize_pinecone(self):
+  
+
+   def __init__(self):
+        utils.configure_openai_api_key()
+        self.openai_model = "gpt-4"
+
+   import os
+import pinecone  # Make sure to import Pinecone
+
+class CustomDataChatbot:
+    def __init__(self):
+        utils.configure_openai_api_key()
+        self.openai_model = "gpt-4"
+        if 'messages' not in st.session_state:
+            st.session_state.messages = []
+
+    def initialize_pinecone(self):
         """Initialize Pinecone connection."""
         try:
             pinecone_api_key = os.getenv('PINECONE_API_KEY')
@@ -31,10 +47,19 @@ class CustomDataChatbot:
             st.error(f"Failed to initialize Pinecone: {e}")
             return None
 
+    def make_retriever(self):
+        """Create retriever from Pinecone index."""
+        index_name = self.initialize_pinecone()
+        if index_name is None:
+            st.error("Pinecone not initialized. Cannot create retriever.")
+            return None
+        
+        embedding = OpenAIEmbeddings()
+        docsearch = Pinecone.from_existing_index(index_name, embedding)
+        return docsearch
 
-    def __init__(self):
-        utils.configure_openai_api_key()
-        self.openai_model = "gpt-4"
+    
+
 
     def make_retriever(self):
         index_name= initialize_pinecone()
