@@ -19,6 +19,9 @@ def initialize_pinecone():
         environment=os.getenv("PINECONE_ENV"),  # next to api key in console
     )
     index_name= os.getenv("PINECONE_INDEX_NAME")
+    if index_name not in pinecone.list_indexes():
+        # Create an index if it doesn't exist, replace 1536 with the actual dimension of your embeddings
+        pinecone.create_index(index_name, dimension=1536)
     return index_name
 
 def save_to_pinecone(data, file_name):
