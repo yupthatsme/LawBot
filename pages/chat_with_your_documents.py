@@ -16,6 +16,12 @@ st.set_page_config(page_title="ChatDocs", page_icon="📄")
 
 class CustomDataChatbot:
 
+    def initialize_pinecone():
+    pinecone_api_key = os.getenv('PINECONE_API_KEY')
+    pinecone_env = os.getenv('PINECONE_ENV')
+    pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
+    return os.getenv('PINECONE_INDEX_NAME')
+
     def __init__(self):
         utils.configure_openai_api_key()
         self.openai_model = "gpt-4"
