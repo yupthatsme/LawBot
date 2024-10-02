@@ -25,7 +25,7 @@ class CustomDataChatbot:
     def make_retriever(self):
     # Retrieve Pinecone API details from environment variables
        pinecone_api_key = os.getenv("f9786599-94f4-45bf-8d05-a35392544844")  # Ensure this is set in your .env or environment variables
-       pinecone_host = os.getenv("https://laws-bcafcfb.svc.aped-4627-b74a.pinecone.io")  # The Pinecone host URL
+       pinecone_host = os.getenv("laws-bcafcfb.svc.aped-4627-b74a.pinecone.io")  # The Pinecone host URL
 
     # Debugging: Check if the host is being retrieved
        print(f"Pinecone API Key: {pinecone_api_key}")
