@@ -16,50 +16,9 @@ st.set_page_config(page_title="ChatDocs", page_icon="📄")
 
 class CustomDataChatbot:
 
-  
-
-   def __init__(self):
-        utils.configure_openai_api_key()
-        self.openai_model = "gpt-4"
-
-   import os
-import pinecone  # Make sure to import Pinecone
-
-class CustomDataChatbot:
     def __init__(self):
         utils.configure_openai_api_key()
-        self.openai_model = "gpt-4"
-        if 'messages' not in st.session_state:
-            st.session_state.messages = []
-
-    def initialize_pinecone(self):
-        """Initialize Pinecone connection."""
-        try:
-            pinecone_api_key = os.getenv('PINECONE_API_KEY')
-            pinecone_env = os.getenv('PINECONE_ENV')
-            pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
-            index_name = os.getenv('PINECONE_INDEX_NAME')
-            if index_name not in pinecone.list_indexes():
-                # If index does not exist, create it
-                pinecone.create_index(index_name, dimension=1536)  # Ensure the dimension is correct
-            return index_name
-        except Exception as e:
-            st.error(f"Failed to initialize Pinecone: {e}")
-            return None
-
-    def make_retriever(self):
-        """Create retriever from Pinecone index."""
-        index_name = self.initialize_pinecone()
-        if index_name is None:
-            st.error("Pinecone not initialized. Cannot create retriever.")
-            return None
-        
-        embedding = OpenAIEmbeddings()
-        docsearch = Pinecone.from_existing_index(index_name, embedding)
-        return docsearch
-
-    
-
+        self.openai_model = "gpt-3.5-turbo-16k"
 
     def make_retriever(self):
         index_name= initialize_pinecone()
@@ -92,8 +51,6 @@ class CustomDataChatbot:
         llm = ChatOpenAI(temperature=0)
 
         # Setup LLM and QA chain
-        # llm = ChatOpenAI(model_name=self.openai_model, temperature=0, streaming=True)
-           # Use GPT-4 as the model
         llm = ChatOpenAI(model_name=self.openai_model, temperature=0, streaming=True)
 
         qa_chain = ConversationalRetrievalChain.from_llm(
