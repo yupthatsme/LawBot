@@ -26,30 +26,33 @@ class CustomDataChatbot:
     def __init__(self):
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
-        load_dotenv()
+        
 
     def make_retriever(self):
-    # Retrieve Pinecone API details from environment variables
-       pinecone_api_key = os.getenv("f9786599-94f4-45bf-8d05-a35392544844")  # Ensure this is set in your .env or environment variables
-       pinecone_host = os.getenv("laws-bcafcfb.svc.aped-4627-b74a.pinecone.io")  # The Pinecone host URL
+       load_dotenv()  # Load the .env file
 
-    # Debugging: Check if the host is being retrieved
-       print(f"Pinecone API Key: {pinecone_api_key}")
-       print(f"Pinecone Host: {pinecone_host}")
+        # Retrieve environment variables
+        pinecone_host = os.getenv("PINECONE_HOST")
+        pinecone_api_key = os.getenv("PINECONE_API_KEY")
+        index_name = os.getenv("PINECONE_INDEX_NAME")
 
-       if not pinecone_host:
-          raise ValueError("Pinecone host is not set. Please check your environment variables.")
+        # Print to check values
+        print(f"Pinecone Host: {pinecone_host}")
+        print(f"Pinecone API Key: {pinecone_api_key}")
+        print(f"Index Name: {index_name}")
 
-    # Initialize Pinecone with the API key and host
-       index_name = initialize_pinecone()  # Initialize Pinecone and get the index name
-       embedding = OpenAIEmbeddings()  # Ensure this is configured correctly
+        # Check if the host is set
+        if not pinecone_host:
+            raise ValueError("Pinecone host is not set. Please check your environment variables.")
 
-    # Initialize the Pinecone index directly, passing the api_key and host
-       index = Index(api_key=pinecone_api_key, index_name=index_name, host=pinecone_host)
+        # Continue with initialization
+        pc = Pinecone(api_key=pinecone_api_key, host=pinecone_host)
+        index = pc.Index(index_name)
 
-    # Create a retriever with the Pinecone index and embeddings
-       docsearch = Pinecone(index, embedding.embed_query, 'text')
-       return docsearch
+        # Create a retriever
+        embedding = OpenAIEmbeddings()  # Ensure this is configured
+        docsearch = Pinecone(index, embedding.embed_query, 'text')
+        return docsearch
 
 
     def save_file(self, file):
