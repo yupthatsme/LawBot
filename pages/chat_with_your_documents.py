@@ -10,6 +10,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import FAISS, Pinecone
+from pinecone import Pinecone, ServerlessSpec
 from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
@@ -21,10 +22,11 @@ class CustomDataChatbot:
         self.openai_model = "gpt-3.5-turbo-16k"
 
     def make_retriever(self):
-        index_name= initialize_pinecone()
+        index_name = initialize_pinecone()
         embedding = OpenAIEmbeddings()
         docsearch = Pinecone.from_existing_index(index_name, embedding)
         return docsearch
+
 
     def save_file(self, file):
         # Get the file extension from the uploaded file's name
