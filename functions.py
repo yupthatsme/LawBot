@@ -5,24 +5,29 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS, Pinecone
 import uuid
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone, Index, ServerlessSpec
 from dotenv import load_dotenv
 import pandas as pd
 
 
 def initialize_pinecone():
-    pc = Pinecone(api_key=os.getenv("f9786599-94f4-45bf-8d05-a35392544844"))
+    # Initialize Pinecone with your API key
+    pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
 
-    # Check if the index exists, create if it doesn't
-    index_name = "laws"
+    index_name = "your_index_name"  # Replace with your actual index name
+
+    # Check if the index exists, create it if not
     if index_name not in pc.list_indexes().names():
         pc.create_index(
             name=index_name,
-            dimension=1536,  # Adjust the dimension based on your use case
-            metric='cosine',
-            spec=ServerlessSpec(cloud='aws', region=os.getenv("PINECONE_ENV"))
+            dimension=1536,  # Ensure this matches your use case
+            metric='euclidean',
+            spec=ServerlessSpec(
+                cloud='aws',
+                region=os.environ.get("PINECONE_ENV")  # Your Pinecone environment (region)
+            )
         )
-    
+
     return index_name
 
 
