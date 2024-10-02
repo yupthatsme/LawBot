@@ -15,7 +15,7 @@ def initialize_pinecone():
     # Initialize Pinecone with your API key
     pc = Pinecone(api_key=os.environ.get("f9786599-94f4-45bf-8d05-a35392544844"))
 
-    index_name = "laws"  # Replace with your actual index name
+    index_name = "quickstart"  # Replace with your actual index name
 
     # Check if the index exists, create it if not
     if index_name not in pc.list_indexes().names():
