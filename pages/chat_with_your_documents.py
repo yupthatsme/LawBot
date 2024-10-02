@@ -11,6 +11,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import FAISS, Pinecone
 from pinecone import Pinecone, Index, ServerlessSpec
+from pinecone import Index
 from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
@@ -22,15 +23,18 @@ class CustomDataChatbot:
         self.openai_model = "gpt-3.5-turbo-16k"
 
     def make_retriever(self):
-       index_name = initialize_pinecone()  # Initialize Pinecone and get the index name
-       embedding = OpenAIEmbeddings()  # Ensure you have this configured correctly
+        index_name = initialize_pinecone()  # Initialize Pinecone and get the index name
+        embedding = OpenAIEmbeddings()  # Ensure this is configured correctly
 
-    # Initialize the Pinecone index directly
-       index = Index(index_name)
+    # Get the Pinecone environment host from environment variables or config
+        pinecone_host = os.getenv("PINECONE_HOST")  # Ensure this is set in your .env file or environment variables
+
+    # Initialize the Pinecone index directly, passing the host
+        index = Index(index_name=index_name, host=pinecone_host)
 
     # Create a retriever with the Pinecone index and embeddings
-       docsearch = Pinecone(index, embedding.embed_query, 'text')
-       return docsearch
+        docsearch = Pinecone(index, embedding.embed_query, 'text')
+        return docsearch
 
 
     def save_file(self, file):
