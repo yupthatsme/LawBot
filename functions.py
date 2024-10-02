@@ -12,19 +12,19 @@ import pandas as pd
 
 def initialize_pinecone():
     # Initialize Pinecone with your API key
-    pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
+    pc = Pinecone(api_key=os.environ.get("f9786599-94f4-45bf-8d05-a35392544844"))
 
-    index_name = "your_index_name"  # Replace with your actual index name
+    index_name = "laws"  # Replace with your actual index name
 
     # Check if the index exists, create it if not
     if index_name not in pc.list_indexes().names():
         pc.create_index(
             name=index_name,
             dimension=1536,  # Ensure this matches your use case
-            metric='euclidean',
+            metric='cosine',
             spec=ServerlessSpec(
                 cloud='aws',
-                region=os.environ.get("PINECONE_ENV")  # Your Pinecone environment (region)
+                region=os.environ.get("us-east-1")  # Your Pinecone environment (region)
             )
         )
 
