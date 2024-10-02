@@ -18,22 +18,22 @@ def initialize_pinecone():
     pinecone_host = os.getenv("PINECONE_HOST")  # Add this to your .env file
     pc = Pinecone(api_key=api_key, host=pinecone_host)
 
-    index_name = "laws"  # Replace with your actual index name
+    index_name = "quickstart"
 
-
-    # Check if the index exists, create it if not
+# Create the index if it doesn't exist
     if index_name not in pc.list_indexes().names():
-        pc.create_index(
-            name=index_name,
-            dimension=1536,  # Ensure this matches your use case
-            metric='cosine',
-            spec=ServerlessSpec(
-                cloud='aws',
-                region=os.environ.get("us-east-1")  # Your Pinecone environment (region)
-            )
+       pc.create_index(
+          name=index_name,
+          dimension=1536,  # Adjust based on your embedding dimensions
+          metric='cosine',
+          spec=ServerlessSpec(
+              cloud='aws',  # Adjust based on your cloud provider
+              region='us-east-1'  # Adjust based on your preferred region
         )
+    )
 
-    return index_name
+# Access the index
+index = pc.Index(index_name)
 
 
 def save_to_pinecone(data, file_name):
