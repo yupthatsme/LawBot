@@ -9,6 +9,7 @@ from pinecone import Pinecone, Index, ServerlessSpec
 from dotenv import load_dotenv
 import pandas as pd
 
+load_dotenv()
 
 def initialize_pinecone():
     # Initialize Pinecone with your API key
