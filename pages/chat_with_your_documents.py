@@ -4,6 +4,9 @@ import streamlit as st
 from pathlib import Path
 from streaming import StreamHandler
 from functions import *
+from dotenv import load_dotenv
+
+
 import shutil
 
 from langchain.chat_models import ChatOpenAI
@@ -15,6 +18,8 @@ from pinecone import Index
 from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
+# Load environment variables from .env file
+load_dotenv()
 
 class CustomDataChatbot:
 
