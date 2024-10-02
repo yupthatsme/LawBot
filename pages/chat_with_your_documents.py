@@ -19,13 +19,14 @@ from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
 # Load environment variables from .env file
-load_dotenv()
+
 
 class CustomDataChatbot:
 
     def __init__(self):
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
+        load_dotenv()
 
     def make_retriever(self):
     # Retrieve Pinecone API details from environment variables
