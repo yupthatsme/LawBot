@@ -14,7 +14,7 @@ def initialize_pinecone():
     pc = Pinecone(api_key=os.getenv("f9786599-94f4-45bf-8d05-a35392544844"))
 
     # Check if the index exists, create if it doesn't
-    index_name = "your_index_name"
+    index_name = "laws"
     if index_name not in pc.list_indexes().names():
         pc.create_index(
             name=index_name,
