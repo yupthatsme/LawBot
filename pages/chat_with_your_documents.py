@@ -29,7 +29,7 @@ class CustomDataChatbot:
         
 
     def make_retriever(self):
-       load_dotenv()  # Load the .env file
+        load_dotenv()  # Load the .env file
 
         # Retrieve environment variables
         pinecone_host = os.getenv("PINECONE_HOST")
@@ -53,7 +53,6 @@ class CustomDataChatbot:
         embedding = OpenAIEmbeddings()  # Ensure this is configured
         docsearch = Pinecone(index, embedding.embed_query, 'text')
         return docsearch
-
 
     def save_file(self, file):
         # Get the file extension from the uploaded file's name
