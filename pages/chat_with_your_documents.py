@@ -18,26 +18,24 @@ class CustomDataChatbot:
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
 
-    def make_retriever(self):
-        load_dotenv()  # Load the .env file
-        pinecone_host = os.getenv("PINECONE_HOST")
+    def make_retriever():
         pinecone_api_key = os.getenv("PINECONE_API_KEY")
-        index_name = os.getenv("PINECONE_INDEX_NAME")
-
-        # Print to check values (consider removing in production)
-        print(f"Pinecone Host: {pinecone_host}")
-        print(f"Pinecone API Key: {pinecone_api_key}")
-        print(f"Index Name: {index_name}")
-
-        if not pinecone_host or not pinecone_api_key or not index_name:
-            raise ValueError("Pinecone configuration is missing. Please check your environment variables.")
-
-        pc = Pinecone(api_key=pinecone_api_key, host=pinecone_host)
-        index = pc.Index(index_name)
-
-        embedding = OpenAIEmbeddings()
-        docsearch = Pinecone(index, embedding.embed_query, 'text')
-        return docsearch
+        pinecone_host = "https://quickstart-bcafcfb.svc.us-east1-gcp.pinecone.io"
+        index_name = "quickstart"
+    
+    # Initialize Pinecone with the right API key and host
+        pc = pinecone.init(api_key=pinecone_api_key, environment="us-east1-gcp")
+    
+    # Connect to the index
+       index = pinecone.Index(index_name)
+    
+    # Use OpenAI embeddings
+       embedding = OpenAIEmbeddings()
+    
+    # Initialize retriever
+       docsearch = Pinecone(index, embedding.embed_query, "text")
+    
+       return docsearch
 
     def save_file(self, file):
         file_extension = file.name.split('.')[-1].lower()
