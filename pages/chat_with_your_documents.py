@@ -30,12 +30,12 @@ class CustomDataChatbot:
         index = pinecone.Index(index_name)
     
     # Use OpenAI embeddings
-       embedding = OpenAIEmbeddings()
+        embedding = OpenAIEmbeddings()
     
     # Initialize retriever
-       docsearch = Pinecone(index, embedding.embed_query, "text")
+        docsearch = Pinecone(index, embedding.embed_query, "text")
     
-       return docsearch
+        return docsearch
 
     def save_file(self, file):
         file_extension = file.name.split('.')[-1].lower()
