@@ -9,31 +9,41 @@ from pinecone import Pinecone, Index, ServerlessSpec
 from dotenv import load_dotenv
 import pandas as pd
 
-load_dotenv()
-
 def initialize_pinecone():
-    # Initialize Pinecone with your API key
-    # Initialize Pinecone with your API key
+    # Load Pinecone API settings from environment
+    load_dotenv()
     api_key = os.getenv("PINECONE_API_KEY")
-    pinecone_host = os.getenv("PINECONE_HOST")  # Add this to your .env file
+    pinecone_host = os.getenv("PINECONE_HOST")
+
+    if not api_key or not pinecone_host:
+        raise ValueError("Missing Pinecone API Key or Host in environment variables")
+
+    # Initialize Pinecone client
     pc = Pinecone(api_key=api_key, host=pinecone_host)
 
+    # Define your index name
     index_name = "quickstart"
 
-# Create the index if it doesn't exist
+    # Check if the index exists, and create if necessary
     if index_name not in pc.list_indexes().names():
-       pc.create_index(
-          name=index_name,
-          dimension=1536,  # Adjust based on your embedding dimensions
-          metric='cosine',
-          spec=ServerlessSpec(
-              cloud='aws',  # Adjust based on your cloud provider
-              region='us-east-1'  # Adjust based on your preferred region
+        print(f"Creating new Pinecone index: {index_name}")
+        pc.create_index(
+            name=index_name,
+            dimension=1536,  # Adjust dimension based on your embeddings
+            metric='cosine',
+            spec=ServerlessSpec(
+                cloud='aws',
+                region='us-east-1'
+            )
         )
-    )
+    else:
+        print(f"Pinecone index '{index_name}' already exists.")
 
-# Access the index
-index = pc.Index(index_name)
+    # Return the index for further operations
+    index = pc.Index(index_name)
+    return index
+
+
 
 
 def save_to_pinecone(data, file_name):
@@ -103,13 +113,17 @@ def process_pdf_file(file, file_name, file_extension):
     temp_file = make_temp_file(file, file_name, extension)
 
     try:
-        # Now you can pass the path of the temporary file to your loader
+        # Use the PyPDFLoader to load the PDF into a data structure
         loader = PyPDFLoader(file_path=temp_file.name)
         data = loader.load()
-        # print(len(data))
+        
+        # Store the data into Pinecone or another vector store
         save_to_pinecone(data, file_name)
+
+    except Exception as e:
+        print(f"Error processing PDF file: {e}")
     finally:
-        # Clean up the temporary file
+        # Clean up temporary file
         os.remove(temp_file.name)
 
 def process_docx_file(file, file_name, file_extension):
