@@ -7,8 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import Pinecone
-from langchain.embeddings.openai import OpenAIEmbeddings
-import pinecone  # Ensure correct import
+from pinecone import Pinecone
 from dotenv import load_dotenv
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
@@ -19,23 +18,21 @@ class CustomDataChatbot:
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
 
-    def make_retriever(self):
+    def make_retriever():
         pinecone_api_key = os.getenv("PINECONE_API_KEY")
         pinecone_host = "https://quickstart-bcafcfb.svc.us-east1-gcp.pinecone.io"
         index_name = "quickstart"
     
-        # Initialize Pinecone with the right API key and environment
-        pinecone.init(api_key=pinecone_api_key, environment="us-east1-gcp")  # Check for init method
-
-        # Ensure Pinecone has been properly initialized; otherwise, handle exceptions if necessary
-
-        # Connect to the index
-        index = pinecone.Index(index_name)
+    # Initialize Pinecone with the right API key and host
+        pc = pinecone.init(api_key=pinecone_api_key, environment="us-east1-gcp")
     
-        # Use OpenAI embeddings
+    # Connect to the index
+         index = pinecone.Index(index_name)
+    
+    # Use OpenAI embeddings
         embedding = OpenAIEmbeddings()
     
-        # Initialize retriever
+    # Initialize retriever
         docsearch = Pinecone(index, embedding.embed_query, "text")
     
         return docsearch
