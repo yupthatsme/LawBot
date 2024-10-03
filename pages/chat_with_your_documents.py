@@ -22,10 +22,10 @@ class CustomDataChatbot:
 
         pinecone_api_key = os.getenv("PINECONE_API_KEY")
         pinecone_host = "https://quickstart-bcafcfb.svc.us-east1-gcp.pinecone.io"
-        index_name = "quickstart"
+        index_name = os.getenv("PINECONE_INDEX_NAME", "quickstart")  # Ensure you set a default if needed
 
-    # Initialize Pinecone with the API key
-        pc = Pinecone(api_key=pinecone_api_key)
+    # Initialize Pinecone with the correct parameters
+        pc = Pinecone(host=pinecone_host, api_key=pinecone_api_key)
 
     # Connect to the index
         index = pc.Index(index_name)
@@ -37,7 +37,6 @@ class CustomDataChatbot:
         docsearch = Pinecone(index, embedding.embed_query, "text")
 
         return docsearch
-
 
 
     def save_file(self, file):
