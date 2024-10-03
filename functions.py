@@ -28,7 +28,7 @@ def initialize_pinecone():
           metric='cosine',
           spec=ServerlessSpec(
               cloud='aws',  # Adjust based on your cloud provider
-              region='us-east-1-aws'  # Adjust based on your preferred region
+              region='us-east-1'  # Adjust based on your preferred region
         )
     )
 
