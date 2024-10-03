@@ -18,7 +18,7 @@ class CustomDataChatbot:
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
 
-     def make_retriever(self):
+    def make_retriever(self):
         load_dotenv()  # Load the .env file
         pinecone_host = os.getenv("PINECONE_HOST")
         pinecone_api_key = os.getenv("PINECONE_API_KEY")
