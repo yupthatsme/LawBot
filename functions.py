@@ -47,18 +47,20 @@ def initialize_pinecone():
 
 
 def save_to_pinecone(data, file_name):
+    # Ensure the Pinecone index is initialized
+    index = initialize_pinecone()
 
-    index_name= initialize_pinecone()
-
+    # Split the document into manageable chunks
     text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1500,
-            chunk_overlap=200
-        )
+        chunk_size=1500,
+        chunk_overlap=200
+    )
     docs = text_splitter.split_documents(data)
 
+    # Initialize OpenAI embeddings
     embeddings = OpenAIEmbeddings()
 
-    index = pinecone.Index(index_name)
+    # Store the split documents into Pinecone vector store
     vectorstore = Pinecone(index, embeddings.embed_query, "text")
     vectorstore.add_documents(docs)
 
