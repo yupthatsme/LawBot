@@ -12,31 +12,31 @@ import pandas as pd
 def initialize_pinecone():
     # Load Pinecone API key and environment variables
     load_dotenv()
-    api_key = os.getenv("PINECONE_API_KEY")  # Use the actual Pinecone API key here
-    environment = "us-east1-gcp"  # This is based on the provided region
+    api_key = os.getenv("PINECONE_API_KEY")  # Load the Pinecone API key from environment variables
+    environment = "us-east1-gcp"  # The environment based on your region
 
     if not api_key:
         raise ValueError("Missing Pinecone API key in environment variables")
 
-    # Initialize Pinecone with the correct environment
-    pinecone.init(api_key=api_key, environment=environment)
+    # Instantiate the Pinecone object with the API key
+    pc = pinecone.Pinecone(api_key=api_key)
 
     # Index information
-    index_name = "quickstart"  # Correct index name based on your info
+    index_name = "quickstart"  # Index name as specified
 
     # Check if the index exists, and create it if not
-    if index_name not in pinecone.list_indexes():
+    if index_name not in pc.list_indexes():
         print(f"Creating new Pinecone index: {index_name}")
-        pinecone.create_index(
+        pc.create_index(
             name=index_name,
-            dimension=1536,  # Embedding size (adjust as necessary)
-            metric="cosine"  # The similarity metric you are using
+            dimension=1536,  # Embedding size; make sure this matches your model's output
+            metric="cosine"  # The similarity metric being used
         )
     else:
         print(f"Pinecone index '{index_name}' already exists.")
 
     # Connect to the index
-    index = pinecone.Index(index_name)
+    index = pc.Index(index_name)
     return index
 
 def save_to_pinecone(data, file_name):
