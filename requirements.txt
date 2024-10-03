@@ -75,7 +75,7 @@ overrides==7.4.0
 packaging==23.1
 pandas==2.0.3
 Pillow==9.5.0
-pinecone-client==3.0.0
+pinecone-client==5.0.0
 posthog==3.0.2
 protobuf==4.24.2
 pulsar-client==3.3.0
