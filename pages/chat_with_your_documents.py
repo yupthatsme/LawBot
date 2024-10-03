@@ -7,7 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import Pinecone
-from pinecone import Pinecone
+import pinecone
 from dotenv import load_dotenv
 
 st.set_page_config(page_title="ChatDocs", page_icon="📄")
