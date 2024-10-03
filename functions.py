@@ -31,7 +31,7 @@ def initialize_pinecone():
             name=index_name,
             dimension=1536,  # Adjust dimension based on your embeddings
             metric='cosine',
-            spec=ServerlessSpec(cloud='aws', region='us-east-1')
+            spec=ServerlessSpec(cloud='GCP', region='us-east1-gcp')
         )
     else:
         print(f"Pinecone index '{index_name}' already exists.")
