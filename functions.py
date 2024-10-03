@@ -10,36 +10,34 @@ from dotenv import load_dotenv
 import pandas as pd
 
 def initialize_pinecone():
-    # Load Pinecone API settings from environment
+    # Load Pinecone API key and environment variables
     load_dotenv()
-    api_key = os.getenv("PINECONE_API_KEY")
-    environment = os.getenv("PINECONE_ENVIRONMENT")  # Add environment variable
+    api_key = os.getenv("PINECONE_API_KEY")  # Use the actual Pinecone API key here
+    environment = "us-east1-gcp"  # This is based on the provided region
 
-    if not api_key or not environment:
-        raise ValueError("Missing Pinecone API Key or environment in environment variables")
+    if not api_key:
+        raise ValueError("Missing Pinecone API key in environment variables")
 
-    # Initialize Pinecone client
+    # Initialize Pinecone with the correct environment
     pinecone.init(api_key=api_key, environment=environment)
 
-    # Define your index name
-    index_name = "quickstart"
+    # Index information
+    index_name = "quickstart"  # Correct index name based on your info
 
-    # Check if the index exists, and create if necessary
+    # Check if the index exists, and create it if not
     if index_name not in pinecone.list_indexes():
         print(f"Creating new Pinecone index: {index_name}")
         pinecone.create_index(
             name=index_name,
-            dimension=1536,  # Adjust dimension based on your embeddings
-            metric='cosine',
-            spec=ServerlessSpec(cloud='GCP', region='us-east1-gcp')
+            dimension=1536,  # Embedding size (adjust as necessary)
+            metric="cosine"  # The similarity metric you are using
         )
     else:
         print(f"Pinecone index '{index_name}' already exists.")
 
-    # Return the index for further operations
+    # Connect to the index
     index = pinecone.Index(index_name)
     return index
-
 
 def save_to_pinecone(data, file_name):
     # Ensure the Pinecone index is initialized
