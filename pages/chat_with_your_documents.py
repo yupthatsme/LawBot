@@ -27,7 +27,7 @@ class CustomDataChatbot:
         pc = pinecone.init(api_key=pinecone_api_key, environment="us-east1-gcp")
     
     # Connect to the index
-       index = pinecone.Index(index_name)
+        index = pinecone.Index(index_name)
     
     # Use OpenAI embeddings
        embedding = OpenAIEmbeddings()
