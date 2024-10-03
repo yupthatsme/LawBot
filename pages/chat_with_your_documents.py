@@ -14,7 +14,7 @@ st.set_page_config(page_title="ChatDocs", page_icon="📄")
 
 class CustomDataChatbot:
 
-    def __init__():
+    def __init__(self):
         utils.configure_openai_api_key()
         self.openai_model = "gpt-3.5-turbo-16k"
 
