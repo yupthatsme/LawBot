@@ -13,37 +13,32 @@ def initialize_pinecone():
     # Load Pinecone API settings from environment
     load_dotenv()
     api_key = os.getenv("PINECONE_API_KEY")
-    pinecone_host = os.getenv("PINECONE_HOST")
+    environment = os.getenv("PINECONE_ENVIRONMENT")  # Add environment variable
 
-    if not api_key or not pinecone_host:
-        raise ValueError("Missing Pinecone API Key or Host in environment variables")
+    if not api_key or not environment:
+        raise ValueError("Missing Pinecone API Key or environment in environment variables")
 
     # Initialize Pinecone client
-    pc = Pinecone(api_key=api_key, host=pinecone_host)
+    pinecone.init(api_key=api_key, environment=environment)
 
     # Define your index name
     index_name = "quickstart"
 
     # Check if the index exists, and create if necessary
-    if index_name not in pc.list_indexes().names():
+    if index_name not in pinecone.list_indexes():
         print(f"Creating new Pinecone index: {index_name}")
-        pc.create_index(
+        pinecone.create_index(
             name=index_name,
             dimension=1536,  # Adjust dimension based on your embeddings
             metric='cosine',
-            spec=ServerlessSpec(
-                cloud='aws',
-                region='us-east-1'
-            )
+            spec=ServerlessSpec(cloud='aws', region='us-east-1')
         )
     else:
         print(f"Pinecone index '{index_name}' already exists.")
 
     # Return the index for further operations
-    index = pc.Index(index_name)
+    index = pinecone.Index(index_name)
     return index
-
-
 
 
 def save_to_pinecone(data, file_name):
